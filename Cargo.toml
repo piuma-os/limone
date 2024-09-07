@@ -1,0 +1,13 @@
+[package]
+name = "limone"
+version = "0.0.1"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["Federico Maria Morrone <contact@morrone.dev>"]
+description = "Limine"
+readme = "README.md"
+documentation = "https://docs.rs/limone"
+repository = "https://github.com/piuma-os/limone"
+include = ["src/**/*.rs", "README.md", "LICENSE"]
+
+[dependencies]
