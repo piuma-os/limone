@@ -15,8 +15,8 @@ include = ["src/**/*.rs", "README.md", "LICENSE"]
 
 [package.metadata.docs.rs]
 targets = [
-    "x86_64-unknown-none",
-    "aarch64-unknown-none",
-    "riscv64gc-unknown-none-elf",
-    "loongarch64-unknown-none",
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+    "riscv64gc-unknown-linux-gnu",
+    "loongarch64-unknown-linux-gnu",
 ]
