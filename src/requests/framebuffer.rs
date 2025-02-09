@@ -1,7 +1,4 @@
-use core::{
-    cell::UnsafeCell,
-    ptr::{self, NonNull},
-};
+use core::{cell::UnsafeCell, ptr::NonNull};
 
 use crate::sys;
 
@@ -62,7 +59,7 @@ impl FramebufferRequest {
     }
 
     pub fn get_response(&self) -> Option<FramebufferResponse> {
-        unsafe { ptr::read_volatile(self.response.get()) }
+        unsafe { self.response.get().read_volatile() }
     }
 }
 

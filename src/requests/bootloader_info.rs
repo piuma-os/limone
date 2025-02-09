@@ -1,8 +1,4 @@
-use core::{
-    cell::UnsafeCell,
-    ffi::CStr,
-    ptr::{self, NonNull},
-};
+use core::{cell::UnsafeCell, ffi::CStr, ptr::NonNull};
 
 use crate::sys;
 
@@ -31,7 +27,7 @@ impl BootloaderInfoRequest {
     }
 
     pub fn get_response(&self) -> Option<BootloaderInfoResponse> {
-        unsafe { ptr::read_volatile(self.response.get()) }
+        unsafe { self.response.get().read_volatile() }
     }
 }
 
