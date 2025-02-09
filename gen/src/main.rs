@@ -1,6 +1,6 @@
-use std::{fmt::Write as _, fs, path::Path};
-
 use anyhow::Result;
+use std::{fmt::Write as _, fs, path::Path};
+use tracing::debug;
 
 const TARGETS: [&str; 4] = [
     "x86_64-unknown-none",
@@ -24,6 +24,8 @@ fn delete_if_exists<P: AsRef<Path>>(path: P) -> Result<()> {
 fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
+    debug!("Deleting old bindings...");
+
     delete_if_exists("../src/sys")?;
     delete_if_exists("../src/sys.rs")?;
 
@@ -35,6 +37,8 @@ fn main() -> Result<()> {
         let target_arch = target
             .strip_suffix("-unknown-none")
             .expect("Internal error");
+
+        debug!("Generating bindings for {target_arch}...");
 
         let bindings = bindgen::builder()
             .use_core()
@@ -51,6 +55,8 @@ fn main() -> Result<()> {
     }
 
     fs::write("../src/sys.rs", sys_module)?;
+
+    debug!("Successfully generated all bindings!");
 
     Ok(())
 }
