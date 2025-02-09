@@ -4,6 +4,7 @@ pub const LIMINE_H: u32 = 1;
 pub const _STDINT_H: u32 = 1;
 pub const _FEATURES_H: u32 = 1;
 pub const _DEFAULT_SOURCE: u32 = 1;
+pub const __GLIBC_USE_ISOC2Y: u32 = 0;
 pub const __GLIBC_USE_ISOC23: u32 = 0;
 pub const __USE_ISOC11: u32 = 1;
 pub const __USE_ISOC99: u32 = 1;
@@ -37,7 +38,7 @@ pub const __STDC_IEC_60559_COMPLEX__: u32 = 201404;
 pub const __STDC_ISO_10646__: u32 = 201706;
 pub const __GNU_LIBRARY__: u32 = 6;
 pub const __GLIBC__: u32 = 2;
-pub const __GLIBC_MINOR__: u32 = 40;
+pub const __GLIBC_MINOR__: u32 = 41;
 pub const _SYS_CDEFS_H: u32 = 1;
 pub const __glibc_c99_flexarr_available: u32 = 1;
 pub const __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI: u32 = 0;
@@ -97,12 +98,14 @@ pub const SIG_ATOMIC_MAX: u32 = 2147483647;
 pub const SIZE_MAX: u32 = 4294967295;
 pub const WINT_MIN: u32 = 0;
 pub const WINT_MAX: u32 = 4294967295;
+pub const LIMINE_API_REVISION: u32 = 0;
 pub const LIMINE_MEDIA_TYPE_GENERIC: u32 = 0;
 pub const LIMINE_MEDIA_TYPE_OPTICAL: u32 = 1;
 pub const LIMINE_MEDIA_TYPE_TFTP: u32 = 2;
 pub const LIMINE_FIRMWARE_TYPE_X86BIOS: u32 = 0;
 pub const LIMINE_FIRMWARE_TYPE_UEFI32: u32 = 1;
 pub const LIMINE_FIRMWARE_TYPE_UEFI64: u32 = 2;
+pub const LIMINE_FIRMWARE_TYPE_SBI: u32 = 3;
 pub const LIMINE_FRAMEBUFFER_RGB: u32 = 1;
 pub const LIMINE_TERMINAL_CB_DEC: u32 = 10;
 pub const LIMINE_TERMINAL_CB_BELL: u32 = 20;
@@ -122,7 +125,6 @@ pub const LIMINE_TERMINAL_OOB_OUTPUT_ONOCR: u32 = 64;
 pub const LIMINE_TERMINAL_OOB_OUTPUT_OPOST: u32 = 128;
 pub const LIMINE_PAGING_MODE_AARCH64_4LVL: u32 = 0;
 pub const LIMINE_PAGING_MODE_AARCH64_5LVL: u32 = 1;
-pub const LIMINE_PAGING_MODE_MAX: u32 = 1;
 pub const LIMINE_PAGING_MODE_MIN: u32 = 0;
 pub const LIMINE_PAGING_MODE_DEFAULT: u32 = 0;
 pub const LIMINE_MEMMAP_USABLE: u32 = 0;
@@ -1263,4 +1265,41 @@ const _: () = {
         [::core::mem::offset_of!(limine_dtb_request, revision) - 32usize];
     ["Offset of field: limine_dtb_request::response"]
         [::core::mem::offset_of!(limine_dtb_request, response) - 40usize];
+};
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct limine_riscv_bsp_hartid_response {
+    pub revision: u64,
+    pub bsp_hartid: u64,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of limine_riscv_bsp_hartid_response"]
+        [::core::mem::size_of::<limine_riscv_bsp_hartid_response>() - 16usize];
+    ["Alignment of limine_riscv_bsp_hartid_response"]
+        [::core::mem::align_of::<limine_riscv_bsp_hartid_response>() - 8usize];
+    ["Offset of field: limine_riscv_bsp_hartid_response::revision"]
+        [::core::mem::offset_of!(limine_riscv_bsp_hartid_response, revision) - 0usize];
+    ["Offset of field: limine_riscv_bsp_hartid_response::bsp_hartid"]
+        [::core::mem::offset_of!(limine_riscv_bsp_hartid_response, bsp_hartid) - 8usize];
+};
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct limine_riscv_bsp_hartid_request {
+    pub id: [u64; 4usize],
+    pub revision: u64,
+    pub response: *mut limine_riscv_bsp_hartid_response,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of limine_riscv_bsp_hartid_request"]
+        [::core::mem::size_of::<limine_riscv_bsp_hartid_request>() - 48usize];
+    ["Alignment of limine_riscv_bsp_hartid_request"]
+        [::core::mem::align_of::<limine_riscv_bsp_hartid_request>() - 8usize];
+    ["Offset of field: limine_riscv_bsp_hartid_request::id"]
+        [::core::mem::offset_of!(limine_riscv_bsp_hartid_request, id) - 0usize];
+    ["Offset of field: limine_riscv_bsp_hartid_request::revision"]
+        [::core::mem::offset_of!(limine_riscv_bsp_hartid_request, revision) - 32usize];
+    ["Offset of field: limine_riscv_bsp_hartid_request::response"]
+        [::core::mem::offset_of!(limine_riscv_bsp_hartid_request, response) - 40usize];
 };
