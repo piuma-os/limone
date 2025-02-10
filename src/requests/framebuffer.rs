@@ -1,4 +1,4 @@
-use core::{cell::UnsafeCell, ptr::NonNull};
+use core::{cell::UnsafeCell, ffi::c_void, ptr::NonNull};
 
 use crate::sys;
 
@@ -22,6 +22,46 @@ pub struct FrameBuffer {
 impl FrameBuffer {
     pub const fn as_raw(&self) -> &sys::limine_framebuffer {
         unsafe { self.raw.as_ref() }
+    }
+
+    pub const fn address(&self) -> *mut c_void {
+        self.as_raw().address
+    }
+
+    pub const fn width(&self) -> u64 {
+        self.as_raw().width
+    }
+
+    pub const fn height(&self) -> u64 {
+        self.as_raw().height
+    }
+
+    pub const fn pitch(&self) -> u64 {
+        self.as_raw().pitch
+    }
+
+    pub const fn red_mask_size(&self) -> u8 {
+        self.as_raw().red_mask_size
+    }
+
+    pub const fn red_mask_shift(&self) -> u8 {
+        self.as_raw().red_mask_shift
+    }
+
+    pub const fn green_mask_size(&self) -> u8 {
+        self.as_raw().green_mask_size
+    }
+
+    pub const fn green_mask_shift(&self) -> u8 {
+        self.as_raw().green_mask_shift
+    }
+
+    pub const fn blue_mask_size(&self) -> u8 {
+        self.as_raw().blue_mask_size
+    }
+
+    pub const fn blue_mask_shift(&self) -> u8 {
+        self.as_raw().blue_mask_shift
     }
 }
 
