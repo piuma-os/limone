@@ -337,6 +337,43 @@ const _: () = {
 };
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
+pub struct limine_executable_cmdline_response {
+    pub revision: u64,
+    pub cmdline: *mut ::core::ffi::c_char,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of limine_executable_cmdline_response"]
+        [::core::mem::size_of::<limine_executable_cmdline_response>() - 16usize];
+    ["Alignment of limine_executable_cmdline_response"]
+        [::core::mem::align_of::<limine_executable_cmdline_response>() - 8usize];
+    ["Offset of field: limine_executable_cmdline_response::revision"]
+        [::core::mem::offset_of!(limine_executable_cmdline_response, revision) - 0usize];
+    ["Offset of field: limine_executable_cmdline_response::cmdline"]
+        [::core::mem::offset_of!(limine_executable_cmdline_response, cmdline) - 8usize];
+};
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct limine_executable_cmdline_request {
+    pub id: [u64; 4usize],
+    pub revision: u64,
+    pub response: *mut limine_executable_cmdline_response,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of limine_executable_cmdline_request"]
+        [::core::mem::size_of::<limine_executable_cmdline_request>() - 48usize];
+    ["Alignment of limine_executable_cmdline_request"]
+        [::core::mem::align_of::<limine_executable_cmdline_request>() - 8usize];
+    ["Offset of field: limine_executable_cmdline_request::id"]
+        [::core::mem::offset_of!(limine_executable_cmdline_request, id) - 0usize];
+    ["Offset of field: limine_executable_cmdline_request::revision"]
+        [::core::mem::offset_of!(limine_executable_cmdline_request, revision) - 32usize];
+    ["Offset of field: limine_executable_cmdline_request::response"]
+        [::core::mem::offset_of!(limine_executable_cmdline_request, response) - 40usize];
+};
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct limine_firmware_type_response {
     pub revision: u64,
     pub firmware_type: u64,
