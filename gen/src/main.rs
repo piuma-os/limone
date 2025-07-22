@@ -1,6 +1,7 @@
 use anyhow::Result;
+use heck::ToUpperCamelCase;
 use regex::Regex;
-use std::{fmt::Write as _, fs, path::Path};
+use std::{fmt::Write as FmtWrite, fs, path::Path};
 use tracing::debug;
 
 const TARGETS: [&str; 4] = [
@@ -34,7 +35,20 @@ fn main() -> Result<()> {
     fs::create_dir_all("../src/sys")?;
 
     let mut sys_module = String::new();
+    let mut magic_module = String::new();
 
+    write_bindings(&mut sys_module)?;
+    write_magic(&mut magic_module)?;
+
+    fs::write("../src/sys.rs", sys_module)?;
+    fs::write("../src/magic.rs", magic_module)?;
+
+    debug!("Successfully generated all bindings!");
+
+    Ok(())
+}
+
+fn write_bindings<W: FmtWrite>(w: &mut W) -> Result<()> {
     for target in TARGETS {
         let target_arch = target
             .strip_suffix("-unknown-none")
@@ -50,14 +64,16 @@ fn main() -> Result<()> {
 
         bindings.write_to_file(format!("../src/sys/{target_arch}.rs"))?;
 
-        writeln!(&mut sys_module, "#[cfg(target_arch = \"{target_arch}\")]")?;
-        writeln!(&mut sys_module, "mod {target_arch};")?;
-        writeln!(&mut sys_module, "#[cfg(target_arch = \"{target_arch}\")]")?;
-        writeln!(&mut sys_module, "pub use {target_arch}::*;")?;
+        writeln!(w, "#[cfg(target_arch = \"{target_arch}\")]")?;
+        writeln!(w, "mod {target_arch};")?;
+        writeln!(w, "#[cfg(target_arch = \"{target_arch}\")]")?;
+        writeln!(w, "pub use {target_arch}::*;")?;
     }
 
-    let mut magic_module = String::new();
+    Ok(())
+}
 
+fn write_magic<W: FmtWrite>(w: &mut W) -> Result<()> {
     let header = fs::read_to_string("../limine/limine.h")?;
 
     let magic_regex = Regex::new(
@@ -79,16 +95,30 @@ fn main() -> Result<()> {
 
         debug!("Found request {name} with magic {first}, {second}");
 
+        writeln!(w,"pub const LIMINE_{name}_MAGIC: [u64; 4] = [{common_first}, {common_second}, {first}, {second}];")?;
+
         writeln!(
-            &mut magic_module,
-            "pub const LIMINE_{name}_MAGIC: [u64; 4] = [{common_first}, {common_second}, {first}, {second}];"
+            w,
+            r#"
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[repr(transparent)]
+pub struct Limine{struct_name}Magic([u64; 4]);
+
+impl Limine{struct_name}Magic {{
+    pub const fn new() -> Self {{
+        Self(LIMINE_{name}_MAGIC)
+    }}
+}}
+
+impl Default for Limine{struct_name}Magic {{
+    fn default() -> Self {{
+        Self::new()
+    }}
+}}
+"#,
+            struct_name = name.to_upper_camel_case()
         )?;
     }
-
-    fs::write("../src/sys.rs", sys_module)?;
-    fs::write("../src/magic.rs", magic_module)?;
-
-    debug!("Successfully generated all bindings!");
 
     Ok(())
 }
