@@ -1167,3 +1167,46 @@ const _: () = {
     ["Offset of field: limine_riscv_bsp_hartid_request::response"]
         [::core::mem::offset_of!(limine_riscv_bsp_hartid_request, response) - 40usize];
 };
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct limine_bootloader_performance_response {
+    pub revision: u64,
+    pub reset_usec: u64,
+    pub init_usec: u64,
+    pub exec_usec: u64,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of limine_bootloader_performance_response"]
+        [::core::mem::size_of::<limine_bootloader_performance_response>() - 32usize];
+    ["Alignment of limine_bootloader_performance_response"]
+        [::core::mem::align_of::<limine_bootloader_performance_response>() - 8usize];
+    ["Offset of field: limine_bootloader_performance_response::revision"]
+        [::core::mem::offset_of!(limine_bootloader_performance_response, revision) - 0usize];
+    ["Offset of field: limine_bootloader_performance_response::reset_usec"]
+        [::core::mem::offset_of!(limine_bootloader_performance_response, reset_usec) - 8usize];
+    ["Offset of field: limine_bootloader_performance_response::init_usec"]
+        [::core::mem::offset_of!(limine_bootloader_performance_response, init_usec) - 16usize];
+    ["Offset of field: limine_bootloader_performance_response::exec_usec"]
+        [::core::mem::offset_of!(limine_bootloader_performance_response, exec_usec) - 24usize];
+};
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct limine_bootloader_performance_request {
+    pub id: [u64; 4usize],
+    pub revision: u64,
+    pub response: *mut limine_bootloader_performance_response,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of limine_bootloader_performance_request"]
+        [::core::mem::size_of::<limine_bootloader_performance_request>() - 48usize];
+    ["Alignment of limine_bootloader_performance_request"]
+        [::core::mem::align_of::<limine_bootloader_performance_request>() - 8usize];
+    ["Offset of field: limine_bootloader_performance_request::id"]
+        [::core::mem::offset_of!(limine_bootloader_performance_request, id) - 0usize];
+    ["Offset of field: limine_bootloader_performance_request::revision"]
+        [::core::mem::offset_of!(limine_bootloader_performance_request, revision) - 32usize];
+    ["Offset of field: limine_bootloader_performance_request::response"]
+        [::core::mem::offset_of!(limine_bootloader_performance_request, response) - 40usize];
+};
