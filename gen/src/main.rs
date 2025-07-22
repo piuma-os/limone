@@ -1,4 +1,5 @@
 use anyhow::Result;
+use regex::Regex;
 use std::{fmt::Write as _, fs, path::Path};
 use tracing::debug;
 
@@ -28,6 +29,7 @@ fn main() -> Result<()> {
 
     delete_if_exists("../src/sys")?;
     delete_if_exists("../src/sys.rs")?;
+    delete_if_exists("../src/magic.rs")?;
 
     fs::create_dir_all("../src/sys")?;
 
@@ -54,7 +56,37 @@ fn main() -> Result<()> {
         writeln!(&mut sys_module, "pub use {target_arch}::*;")?;
     }
 
+    let mut magic_module = String::new();
+
+    let header = fs::read_to_string("../limine/limine.h")?;
+
+    let magic_regex = Regex::new(
+        r"#define\s*LIMINE_COMMON_MAGIC\s(?<first>0x[a-z0-9]*)\s*,\s*(?<second>0x[a-z0-9]*)",
+    )?;
+
+    let requests_regex = Regex::new(
+        r"#\s*define\s*LIMINE_(?<name>.*)_REQUEST\s*\{\s*LIMINE_COMMON_MAGIC,\s*(?<first>0x[a-z0-9]*)\s*,\s*(?<second>0x[a-z0-9]*)\s*\}",
+    )?;
+
+    let captures = magic_regex.captures(&header).unwrap();
+    let common_first = captures.name("first").unwrap().as_str();
+    let common_second = captures.name("second").unwrap().as_str();
+
+    for cap in requests_regex.captures_iter(&header) {
+        let name = cap.name("name").unwrap().as_str();
+        let first = cap.name("first").unwrap().as_str();
+        let second = cap.name("second").unwrap().as_str();
+
+        debug!("Found request {name} with magic {first}, {second}");
+
+        writeln!(
+            &mut magic_module,
+            "pub const LIMINE_{name}_MAGIC: [u64; 4] = [{common_first}, {common_second}, {first}, {second}];"
+        )?;
+    }
+
     fs::write("../src/sys.rs", sys_module)?;
+    fs::write("../src/magic.rs", magic_module)?;
 
     debug!("Successfully generated all bindings!");
 
