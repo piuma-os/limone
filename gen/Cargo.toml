@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.95"
-bindgen = { version = "0.71.1", default-features = false }
-tracing = "0.1.41"
+anyhow = "1.0.98"
+bindgen = { version = "0.72.0", default-features = false }
+tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
